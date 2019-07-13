@@ -5,10 +5,8 @@ import _ from "lodash";
 Vue.use(Vuex);
 
 const state = {
-  current_id: 3,
   savings: [
     {
-      id: 1,
       wantBuy: {
         name: "可乐",
         cost: 5
@@ -16,7 +14,6 @@ const state = {
       time: 1562803200
     },
     {
-      id: 2,
       wantBuy: {
         name: "星巴克",
         cost: 30
@@ -36,7 +33,7 @@ export default new Vuex.Store({
     ADD_SAVING: (state, saving) => state.savings.unshift(saving),
     EDIT_SAVING: (state, updSaving) => {
       const index = state.savings.findIndex(
-        saving => saving.id == updSaving.id
+        saving => saving.time == updSaving.time
       );
       if (index !== -1) {
         state.savings.splice(index, 1, updSaving);
@@ -51,7 +48,6 @@ export default new Vuex.Store({
     addSaving: (context, saving) => {
       let newSaving;
       newSaving = _.cloneDeep(saving);
-      newSaving.id = state.current_id++;
       newSaving.time = Date.now();
       context.commit("ADD_SAVING", newSaving);
     },

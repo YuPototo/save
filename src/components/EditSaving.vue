@@ -1,40 +1,88 @@
 <template>
   <div>
-    <EditSavingNone
+    <div
       v-if="savingType==='buyNone'"
-      :saving="saving"
-      @inputChange="onEditingChange"
-    />
-    <EditSavingCheap
+      class="add-saving-none"
+    >
+      <div>
+        <label for="want-buy-name">商品</label>
+        <input
+          type="text"
+          id="want-buy-name"
+          v-model="savingEdited.wantBuy.name"
+        >
+      </div>
+      <div>
+        <label for="want-buy-cost">价格</label>
+        <input
+          type="number"
+          id="want-buy-cost"
+          v-model.number="savingEdited.wantBuy.cost"
+        >
+      </div>
+    </div>
+    <div
       v-if="savingType==='buyCheap'"
-      :saving="saving"
-      @inputChange="onEditingChange"
-    />
-    <button @click="clickEdit(editingSaving)">确定修改</button>
+      class="add-saving-cheap"
+    >
+      <div class="want-buy">
+        <h5>原商品</h5>
+        <div class="want-buy-name">
+          <label for="want-buy-name">商品</label>
+          <input
+            type="text"
+            id="want-buy-name"
+            v-model="savingEdited.wantBuy.name"
+          >
+        </div>
+        <div class="want-buy-cost">
+          <label for="want-buy-cost">价格</label>
+          <input
+            type="number"
+            id="want-buy-cost"
+            v-model.number="savingEdited.wantBuy.cost"
+          >
+        </div>
+      </div>
+      <div class="did-buy">
+        <h5>替代品</h5>
+        <div class="did-buy-name">
+          <label for="did-buy-name">商品</label>
+          <input
+            type="text"
+            id="did-buy-name"
+            v-model="savingEdited.didBuy.name"
+          >
+        </div>
+        <div class="did-buy-cost">
+          <label for="did-buy-cost">价格</label>
+          <input
+            type="number"
+            id="new-cost"
+            v-model.number="savingEdited.didBuy.cost"
+          >
+        </div>
+      </div>
+    </div>
+    <button @click="clickEdit(savingEdited)">确定修改</button>
     <button @click="clickDelete(saving)">删除</button>
   </div>
 </template>
 
 <script>
-import EditSavingCheap from './EditSavingCheap'
-import EditSavingNone from './EditSavingNone'
-
 import { mapActions } from 'vuex'
+import Vue from 'vue'
 
 export default {
   name: 'EditSaving',
   data () {
     return {
-      editingSaving: null,
+      savingEdited: {},
     }
   },
   props: [
     'saving'
   ],
-  components: {
-    EditSavingCheap,
-    EditSavingNone
-  },
   computed: {
     savingType () {
       if (this.saving) {
@@ -48,16 +96,27 @@ export default {
       'editSaving',
       'removeSaving'
     ]),
-    onEditingChange (editingSaving) {
-      this.editingSaving = editingSaving;
-    },
-    clickEdit (editingSaving) {
-      this.editSaving(editingSaving);
+    clickEdit (savingEdited) {
+      this.editSaving(savingEdited);
       this.$emit('editDone');
+      this.savingEdited = {}
     },
     clickDelete (saving) {
-      this.removeSaving(saving);
-      this.$emit('deleteDone');
+      if (saving) {
+        this.removeSaving(saving);
+        this.$emit('deleteDone');
+      }
+    }
+  },
+  watch: {
+    saving: function (newSaving) {
+      if (newSaving) {
+        this.savingEdited.time = this.saving.time;
+        this.savingEdited.wantBuy = Vue.util.extend({}, this.saving.wantBuy)
+        if (this.savingType === 'buyCheap') {
+          this.savingEdited.didBuy = Vue.util.extend({}, this.saving.didBuy)
+        }
+      }
     }
   }
 }
