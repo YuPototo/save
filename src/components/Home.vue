@@ -2,17 +2,13 @@
   <div class="home">
     <div class="save_list">
       <h3>节约记录</h3>
-      <SaveItem
-        v-for="(saving, index) in savings"
-        :key="index"
-        :saving="saving"
-        @click.native="editingSaving=saving"
-      />
+      <div v-for="(saving, index) in savings" :key="index" @click="savingInEdit=saving">
+        {{ saving.wantBuy.name }} {{ saving.wantBuy.cost }}元<span v-if="saving.didBuy"> -> {{ saving.didBuy.name }} {{ saving.didBuy.cost }}元</span>
+      </div>
     </div>
     <hr>
     <div class="save_total">
-      <h3>节约累计</h3>
-      <SaveCount />
+      <h3>节约累计 {{ totalSavings }} 元</h3>
     </div>
     <hr>
     <div class="add_save">
@@ -23,7 +19,7 @@
     <div class="edit_save">
       <h3>修改节约</h3>
       <EditSaving
-        :saving="editingSaving"
+        :saving="savingInEdit"
         @editDone="onEditDone"
         @deleteDone="onDeleteDone"
       />
@@ -33,8 +29,6 @@
 </template>
 
 <script>
-import SaveItem from './SaveItem'
-import SaveCount from './SaveCount'
 import AddSaving from './AddSaving'
 import EditSaving from './EditSaving'
 import { mapState } from 'vuex'
@@ -43,26 +37,25 @@ export default {
   name: 'Home',
   data () {
     return {
-      editingSaving: null,
+      savingInEdit: null,
     }
   },
   components: {
-    SaveItem,
-    SaveCount,
     AddSaving,
     EditSaving
   },
   computed: {
     ...mapState({
-      savings: state => state.savings
+      savings: state => state.savings,
+      totalSavings: state => state.savings.reduce((accumulator, saving) => accumulator + saving.didBuy ? (saving.wantBuy.cost - saving.didBuy.cost) : saving.wantBuy.cost, 0)
     })
   },
   methods: {
     onEditDone () {
-      this.editingSaving = null;
+      this.savingInEdit = null;
     },
     onDeleteDone () {
-      this.editingSaving = null;
+      this.savingInEdit = null;
     }
   }
 }

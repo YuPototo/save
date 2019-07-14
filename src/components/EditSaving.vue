@@ -93,11 +93,11 @@ export default {
   },
   methods: {
     ...mapActions([
-      'editSaving',
+      'updateSaving',
       'removeSaving'
     ]),
     clickEdit (savingEdited) {
-      this.editSaving(savingEdited);
+      this.updateSaving(savingEdited);
       this.$emit('editDone');
       this.savingEdited = {}
     },
