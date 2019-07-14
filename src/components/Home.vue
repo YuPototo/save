@@ -1,31 +1,18 @@
 <template>
   <div class="home">
-    <div class="save_list">
-      <h3>节约记录</h3>
-      <div v-for="(saving, index) in savings" :key="index" @click="savingInEdit=saving">
-        {{ saving.wantBuy.name }} {{ saving.wantBuy.cost }}元<span v-if="saving.didBuy"> -> {{ saving.didBuy.name }} {{ saving.didBuy.cost }}元</span>
-      </div>
+    <h3>节约记录</h3>
+    <div v-for="(saving, index) in savings" :key="index" @click="savingInEdit=saving">
+      {{ saving.wantBuy.name }} {{ saving.wantBuy.cost }}元<span v-if="saving.didBuy"> -> {{ saving.didBuy.name }} {{ saving.didBuy.cost }}元</span>
     </div>
     <hr>
-    <div class="save_total">
-      <h3>节约累计 {{ totalSavings }} 元</h3>
-    </div>
+    <h3>节约累计 {{ totalSavings }} 元</h3>
     <hr>
-    <div class="add_save">
-      <h3>新增节约</h3>
-      <AddSaving />
-    </div>
+    <h3>新增节约</h3>
+    <AddSaving />
     <hr>
-    <div class="edit_save">
-      <h3>修改节约</h3>
-      <EditSaving
-        :saving="savingInEdit"
-        @editDone="onEditDone"
-        @deleteDone="onDeleteDone"
-      />
-    </div>
+    <h3>修改节约</h3>
+    <EditSaving :saving="savingInEdit" @editDone="onEditDone" @deleteDone="onDeleteDone"/>
   </div>
-
 </template>
 
 <script>
@@ -47,7 +34,7 @@ export default {
   computed: {
     ...mapState({
       savings: state => state.savings,
-      totalSavings: state => state.savings.reduce((accumulator, saving) => accumulator + saving.didBuy ? (saving.wantBuy.cost - saving.didBuy.cost) : saving.wantBuy.cost, 0)
+      totalSavings: state => state.savings.reduce((accumulator, saving) => accumulator + (saving.didBuy ? (saving.wantBuy.cost - saving.didBuy.cost) : saving.wantBuy.cost), 0)
     })
   },
   methods: {

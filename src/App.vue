@@ -6,6 +6,7 @@
 
 <script>
 import Home from './components/Home.vue'
+import store from './store'
 
 export default {
   name: 'app',
