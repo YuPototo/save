@@ -1,69 +1,34 @@
 <template>
   <div class="home">
-    <div class="save_list">
-      <h3>节约记录</h3>
-      <SaveItem
-        v-for="(saving, index) in savings"
-        :key="index"
-        :saving="saving"
-        @click.native="editingSaving=saving"
-      />
+    <h3>节约累计 {{ totalSavings }} 元</h3>
+    <div v-for="(saving, i) in savings" :key="i">
+      <input v-model="saving.wantBuy.name"><input type="number" v-model.number="saving.wantBuy.cost">元
+      <span v-if="saving.didBuy"> -> <input v-model="saving.didBuy.name"> <input type="number" v-model.number="saving.didBuy.cost">元</span>
+      <button @click="removeSaving(saving)">x</button>
     </div>
     <hr>
-    <div class="save_total">
-      <h3>节约累计</h3>
-      <SaveCount />
-    </div>
-    <hr>
-    <div class="add_save">
-      <h3>新增节约</h3>
-      <AddSaving />
-    </div>
-    <hr>
-    <div class="edit_save">
-      <h3>修改节约</h3>
-      <EditSaving
-        :saving="editingSaving"
-        @editDone="onEditDone"
-        @deleteDone="onDeleteDone"
-      />
-    </div>
+    <h3>新增节约</h3>
+    <AddSaving />
   </div>
-
 </template>
 
 <script>
-import SaveItem from './SaveItem'
-import SaveCount from './SaveCount'
-import AddSaving from './AddSaving'
-import EditSaving from './EditSaving'
-import { mapState } from 'vuex'
+import AddSaving from './AddSaving';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   name: 'Home',
-  data () {
-    return {
-      editingSaving: null,
-    }
-  },
   components: {
-    SaveItem,
-    SaveCount,
-    AddSaving,
-    EditSaving
+    AddSaving
   },
   computed: {
-    ...mapState({
-      savings: state => state.savings
-    })
+    ...mapState(['savings']),
+    totalSavings() {
+      return this.savings.reduce((accumulator, saving) => accumulator + saving.wantBuy.cost - (saving.didBuy ? saving.didBuy.cost : 0), 0);
+    }
   },
   methods: {
-    onEditDone () {
-      this.editingSaving = null;
-    },
-    onDeleteDone () {
-      this.editingSaving = null;
-    }
+    ...mapActions(['removeSaving'])
   }
 }
 </script>
