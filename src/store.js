@@ -1,6 +1,5 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import _ from "lodash";
+import Vue from 'vue';
+import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
@@ -8,18 +7,18 @@ const state = {
   savings: [
     {
       wantBuy: {
-        name: "可乐",
+        name: '可乐',
         cost: 5
       },
       time: 1562803200
     },
     {
       wantBuy: {
-        name: "星巴克",
+        name: '星巴克',
         cost: 30
       },
       didBuy: {
-        name: "全家咖啡",
+        name: '全家咖啡',
         cost: 5
       },
       time: 1562803201
@@ -31,12 +30,12 @@ export default new Vuex.Store({
   state,
   mutations: {
     ADD_SAVING: (state, saving) => state.savings.unshift(saving),
-    EDIT_SAVING: (state, updSaving) => {
+    EDIT_SAVING: (state, savingToEdit) => {
       const index = state.savings.findIndex(
-        saving => saving.time == updSaving.time
+        saving => saving.time == savingToEdit.time
       );
       if (index !== -1) {
-        state.savings.splice(index, 1, updSaving);
+        state.savings.splice(index, 1, savingToEdit);
       }
     },
     REMOVE_SAVING: (state, delSaving) => {
@@ -45,17 +44,8 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    addSaving: (context, saving) => {
-      let newSaving;
-      newSaving = _.cloneDeep(saving);
-      newSaving.time = Date.now();
-      context.commit("ADD_SAVING", newSaving);
-    },
-    editSaving: (context, updSaving) => {
-      context.commit("EDIT_SAVING", updSaving);
-    },
-    removeSaving: (context, saving) => {
-      context.commit("REMOVE_SAVING", saving);
-    }
+    addSaving: (context, saving) => context.commit("ADD_SAVING", {...saving, time:Date.now()} ),
+    editSaving: (context, saving) => context.commit("EDIT_SAVING", saving),
+    removeSaving: (context, saving) => context.commit("REMOVE_SAVING", saving)
   }
 });

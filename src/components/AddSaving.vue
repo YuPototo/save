@@ -6,14 +6,14 @@
       value="buyNone"
       id="buy-none"
       v-model="savingType"
-    > <label for="buy-none">不买</label>
+    > <label for="buy-none">忍住没买</label>
     <input
       type="radio"
       name="saving-type"
       value="buyCheap"
       id="buy-cheap"
       v-model="savingType"
-    > <label for="buy-cheap">降级</label>
+    > <label for="buy-cheap">买更便宜的</label>
 
     <form>
       <div
@@ -25,7 +25,7 @@
           <input
             type="text"
             id="want-buy-name"
-            v-model="buyNone.wantBuy.name"
+            v-model="wantBuy.name"
           >
         </div>
         <div>
@@ -33,7 +33,7 @@
           <input
             type="number"
             id="want-buy-cost"
-            v-model.number="buyNone.wantBuy.cost"
+            v-model.number="wantBuy.cost"
           >
         </div>
       </div>
@@ -48,7 +48,7 @@
             <input
               type="text"
               id="want-buy-name"
-              v-model="buyCheap.wantBuy.name"
+              v-model="wantBuy.name"
             >
           </div>
           <div class="want-buy-cost">
@@ -56,7 +56,7 @@
             <input
               type="number"
               id="want-buy-cost"
-              v-model.number="buyCheap.wantBuy.cost"
+              v-model.number="wantBuy.cost"
             >
           </div>
         </div>
@@ -67,7 +67,7 @@
             <input
               type="text"
               id="did-buy-name"
-              v-model="buyCheap.didBuy.name"
+              v-model="didBuy.name"
             >
           </div>
           <div class="did-buy-cost">
@@ -75,7 +75,7 @@
             <input
               type="number"
               id="new-cost"
-              v-model.number="buyCheap.didBuy.cost"
+              v-model.number="didBuy.cost"
             >
           </div>
         </div>
@@ -89,25 +89,17 @@
 import { mapActions } from 'vuex'
 
 export default {
-  name: 'AddSavings',
+  name: 'AddSaving',
   data () {
     return {
       savingType: 'buyNone',
-      buyNone: {
-        wantBuy: {
-          name: null,
-          cost: null
-        },
+      wantBuy: {
+        name: null,
+        cost: null
       },
-      buyCheap: {
-        wantBuy: {
-          name: null,
-          cost: null
-        },
-        didBuy: {
-          name: null,
-          cost: null
-        }
+      didBuy: {
+        name: null,
+        cost: null
       }
     }
   },
@@ -116,24 +108,15 @@ export default {
       'addSaving'
     ]),
     onClickAdd () {
-      let saving = this.savingType === 'buyNone' ? this.buyNone : this.buyCheap
-      this.addSaving(saving)
-      this.buyNone = {
-        wantBuy: {
-          name: null,
-          cost: null
-        }
-      }
-      this.buyCheap = {
-        wantBuy: {
-          name: null,
-          cost: null
-        },
-        didBuy: {
-          name: null,
-          cost: null
-        }
-      }
+      const saving = { wantBuy: { ...this.wantBuy } };
+      if (this.didBuy.name !== null) saving.didBuy = { ...this.didBuy };
+      this.addSaving(saving);
+      this.reset()
+
+    },
+    reset() {
+      this.wantBuy = { name: null, cost: null };
+      this.didBuy = { name: null, cost: null };
     }
   }
 }
