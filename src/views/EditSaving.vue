@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h3>修改</h3>
     <div
       v-if="savingType==='buyNone'"
       class="add-saving-none"
@@ -71,7 +72,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import Vue from 'vue'
+import _ from 'lodash'
 
 export default {
   name: 'EditSaving',
@@ -80,15 +81,9 @@ export default {
       savingEdited: {},
     }
   },
-  props: [
-    'saving'
-  ],
   computed: {
     savingType () {
-      if (this.saving) {
-        return 'didBuy' in this.saving ? 'buyCheap' : 'buyNone';
-      }
-      return null;
+      return 'didBuy' in this.savingEdited ? 'buyCheap' : 'buyNone';
     }
   },
   methods: {
@@ -98,26 +93,18 @@ export default {
     ]),
     clickEdit (savingEdited) {
       this.editSaving(savingEdited);
-      this.$emit('editDone');
       this.savingEdited = {}
+      this.$router.push('/');
     },
-    clickDelete (saving) {
-      if (saving) {
-        this.removeSaving(saving);
-        this.$emit('deleteDone');
-      }
+    clickDelete (savingEdited) {
+      this.removeSaving(savingEdited);
+      this.$router.push('/');
     }
   },
-  watch: {
-    saving: function (newSaving) {
-      if (newSaving) {
-        this.savingEdited.time = this.saving.time;
-        this.savingEdited.wantBuy = Vue.util.extend({}, this.saving.wantBuy)
-        if (this.savingType === 'buyCheap') {
-          this.savingEdited.didBuy = Vue.util.extend({}, this.saving.didBuy)
-        }
-      }
-    }
+  created() {
+      const time = Number.parseInt(this.$route.params.time)
+      const saving = this.$store.state.savings.filter(saving => saving.time === time)[0]
+      this.savingEdited = _.cloneDeep(saving)
   }
 }
 </script>

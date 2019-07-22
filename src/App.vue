@@ -1,16 +1,25 @@
 <template>
   <div id="app">
-    <Home />
+    <div id="nav">
+      <router-link to="/">首页</router-link> |
+      <router-link to="/add">新增节约</router-link> |
+      <router-link to="/count">节约累计</router-link> 
+    </div>
+    <router-view/>
   </div>
 </template>
 
-<script>
-import Home from './components/Home.vue'
-
-export default {
-  name: 'app',
-  components: {
-    Home
-  }
+<style>
+#nav {
+  padding: 30px;
 }
-</script>
+
+#nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+#nav a.router-link-exact-active {
+  color: #42b983;
+}
+</style>

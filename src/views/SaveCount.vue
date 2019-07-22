@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h3>节约累计</h3>
     总节约金额：{{ totalSavings }} 元
   </div>
 </template>

@@ -1,5 +1,6 @@
 <template>
-  <div class="add-saving">
+  <div>
+    <h3>添加一次节约</h3>
     <input
       type="radio"
       name="saving-type"
@@ -111,8 +112,8 @@ export default {
       const saving = { wantBuy: { ...this.wantBuy } };
       if (this.didBuy.name !== null) saving.didBuy = { ...this.didBuy };
       this.addSaving(saving);
-      this.reset()
-
+      this.reset();
+      this.$router.push('/');
     },
     reset() {
       this.wantBuy = { name: null, cost: null };
