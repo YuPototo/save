@@ -31,7 +31,7 @@ export default {
     editSaving(saving) {
       const time = saving.time
       this.$router.push({name: 'editSaving', params: { time }})
-    }
+    },
   }
 }
 </script>

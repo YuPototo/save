@@ -1,34 +1,18 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import axios from 'axios';
+import _ from 'lodash';
 
 Vue.use(Vuex);
 
 const state = {
-  savings: [
-    {
-      wantBuy: {
-        name: '可乐',
-        cost: 5
-      },
-      time: 1562803200
-    },
-    {
-      wantBuy: {
-        name: '星巴克',
-        cost: 30
-      },
-      didBuy: {
-        name: '全家咖啡',
-        cost: 5
-      },
-      time: 1562803201
-    }
-  ]
+  savings: []
 };
 
 export default new Vuex.Store({
   state,
   mutations: {
+    SET_SAVING: (state, savings) => state.savings = savings,
     ADD_SAVING: (state, saving) => state.savings.unshift(saving),
     EDIT_SAVING: (state, savingToEdit) => {
       const index = state.savings.findIndex(
@@ -44,8 +28,46 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    addSaving: (context, saving) => context.commit("ADD_SAVING", {...saving, time:Date.now()} ),
-    editSaving: (context, saving) => context.commit("EDIT_SAVING", saving),
-    removeSaving: (context, saving) => context.commit("REMOVE_SAVING", saving)
+    async fetchSavings({commit}) {
+      const res = await axios.get('http://localhost:3000/qinyu')
+      commit('SET_SAVING', res.data.savings)
+    },
+    async addSaving({commit}, saving) {
+      const newSaving = {...saving, time:Date.now()}
+      const newSavings = _.cloneDeep(state.savings)
+      newSavings.unshift(newSaving)
+      const data =  {
+        username: 'qinyu', 
+        savings: newSavings
+      }
+      await axios.post('http://localhost:3000/', data)
+      commit('ADD_SAVING', newSaving)
+    },
+    async editSaving({commit}, savingToEdit) {
+      const newSavings = _.cloneDeep(state.savings)
+      const index = newSavings.findIndex(
+        saving => saving.time == savingToEdit.time
+      );
+      if (index !== -1) {
+        newSavings.splice(index, 1, savingToEdit);
+      }
+      const data = {
+        username: 'qinyu',
+        savings: newSavings
+      }
+      await axios.post('http://localhost:3000/', data)
+      commit('EDIT_SAVING', savingToEdit)
+    },
+    async removeSaving({commit}, savingToDelete) {
+      const newSavings = _.cloneDeep(state.savings)
+      let index = newSavings.indexOf(savingToDelete);
+      newSavings.splice(index, 1);
+      const data =  {
+        username: 'qinyu', 
+        savings: newSavings
+      }
+      await axios.post('http://localhost:3000/', data)
+      commit('REMOVE_SAVING', savingToDelete)
+    }
   }
 });

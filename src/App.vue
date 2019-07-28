@@ -9,6 +9,17 @@
   </div>
 </template>
 
+
+<script>
+export default {
+    created(){
+      console.log('created run')
+      this.$store.dispatch('fetchSavings')
+    }
+}
+</script>
+
+
 <style>
 #nav {
   padding: 30px;
