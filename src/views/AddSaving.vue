@@ -87,15 +87,15 @@ export default {
       'addSaving'
     ]),
     onClickAdd () {
-      const saving = { wantBuy: { ...this.wantBuy } };
-      if (this.didBuy.name !== null) saving.didBuy = { ...this.didBuy };
-      this.addSaving(saving);
-      this.reset();
-      this.$router.push('/');
+      const saving = { wantBuy: { ...this.wantBuy } }
+      if (this.didBuy.name !== null) saving.didBuy = { ...this.didBuy }
+      this.addSaving(saving)
+      this.reset()
+      this.$router.push('/')
     },
     reset() {
-      this.wantBuy = { name: null, cost: null };
-      this.didBuy = { name: null, cost: null };
+      this.wantBuy = { name: null, cost: null }
+      this.didBuy = { name: null, cost: null }
     }
   }
 }

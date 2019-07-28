@@ -1,10 +1,7 @@
 <template>
   <div>
     <h3>修改</h3>
-    <div
-      v-if="savingType==='buyNone'"
-      class="add-saving-none"
-    >
+    <div>
       <div>
         <label for="want-buy-name">商品</label>
         <input
@@ -24,31 +21,10 @@
     </div>
     <div
       v-if="savingType==='buyCheap'"
-      class="add-saving-cheap"
     >
-      <div class="want-buy">
-        <h5>原商品</h5>
-        <div class="want-buy-name">
-          <label for="want-buy-name">商品</label>
-          <input
-            type="text"
-            id="want-buy-name"
-            v-model="savingEdited.wantBuy.name"
-          >
-        </div>
-        <div class="want-buy-cost">
-          <label for="want-buy-cost">价格</label>
-          <input
-            type="number"
-            id="want-buy-cost"
-            v-model.number="savingEdited.wantBuy.cost"
-          >
-        </div>
-      </div>
       <div class="did-buy">
-        <h5>替代品</h5>
         <div class="did-buy-name">
-          <label for="did-buy-name">商品</label>
+          <label for="did-buy-name">替代品</label>
           <input
             type="text"
             id="did-buy-name"
@@ -83,7 +59,7 @@ export default {
   },
   computed: {
     savingType () {
-      return 'didBuy' in this.savingEdited ? 'buyCheap' : 'buyNone';
+      return 'didBuy' in this.savingEdited ? 'buyCheap' : 'buyNone'
     }
   },
   methods: {
@@ -92,9 +68,9 @@ export default {
       'removeSaving'
     ]),
     clickEdit () {
-      this.editSaving(this.savingEdited);
+      this.editSaving(this.savingEdited)
       this.savingEdited = {}
-      this.$router.push('/');
+      this.$router.push('/')
     },
     clickDelete () {
       this.removeSaving(this.savingEdited)
