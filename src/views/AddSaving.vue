@@ -17,18 +17,16 @@
     > <label for="buy-cheap">买更便宜的</label>
 
     <form>
-      <div
-        v-if="savingType==='buyNone'"
-        class="want-buy"
-      >
+      <div class="want-buy">
         <div>
           <label for="want-buy-name">商品</label>
           <input
             type="text"
             id="want-buy-name"
+            name="want-buy-name"
             v-model="wantBuy.name"
           >
-        </div>
+        </div> 
         <div>
           <label for="want-buy-cost">价格</label>
           <input
@@ -42,29 +40,9 @@
         v-if="savingType==='buyCheap'"
         class="add-saving-cheap"
       >
-        <div class="want-buy">
-          <h5>原商品</h5>
-          <div class="want-buy-name">
-            <label for="want-buy-name">商品</label>
-            <input
-              type="text"
-              id="want-buy-name"
-              v-model="wantBuy.name"
-            >
-          </div>
-          <div class="want-buy-cost">
-            <label for="want-buy-cost">价格</label>
-            <input
-              type="number"
-              id="want-buy-cost"
-              v-model.number="wantBuy.cost"
-            >
-          </div>
-        </div>
         <div class="did-buy">
-          <h5>替代品</h5>
           <div class="did-buy-name">
-            <label for="did-buy-name">商品</label>
+            <label for="did-buy-name">替代品</label>
             <input
               type="text"
               id="did-buy-name"

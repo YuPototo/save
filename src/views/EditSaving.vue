@@ -65,8 +65,8 @@
         </div>
       </div>
     </div>
-    <button @click="clickEdit(savingEdited)">确定修改</button>
-    <button @click="clickDelete(saving)">删除</button>
+    <button @click="clickEdit()">确定修改</button>
+    <button @click="clickDelete()">删除</button>
   </div>
 </template>
 
@@ -91,20 +91,20 @@ export default {
       'editSaving',
       'removeSaving'
     ]),
-    clickEdit (savingEdited) {
-      this.editSaving(savingEdited);
+    clickEdit () {
+      this.editSaving(this.savingEdited);
       this.savingEdited = {}
       this.$router.push('/');
     },
-    clickDelete (savingEdited) {
-      this.removeSaving(savingEdited);
-      this.$router.push('/');
+    clickDelete () {
+      this.removeSaving(this.savingEdited)
+      this.$router.push('/')
     }
   },
   created() {
-      const time = Number.parseInt(this.$route.params.time)
-      const saving = this.$store.state.savings.filter(saving => saving.time === time)[0]
-      this.savingEdited = _.cloneDeep(saving)
+    const time = Number.parseInt(this.$route.params.time)
+    const saving = this.$store.state.savings.filter(saving => saving.time === time)[0]
+    this.savingEdited = _.cloneDeep(saving)
   }
 }
 </script>

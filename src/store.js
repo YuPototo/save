@@ -22,9 +22,13 @@ export default new Vuex.Store({
         state.savings.splice(index, 1, savingToEdit);
       }
     },
-    REMOVE_SAVING: (state, delSaving) => {
-      let index = state.savings.indexOf(delSaving);
-      state.savings.splice(index, 1);
+    REMOVE_SAVING: (state, savingToDelete) => {
+      const index = state.savings.findIndex(
+        saving => saving.time == savingToDelete.time
+      );
+      if (index !== -1) {
+        state.savings.splice(index, 1);
+      }
     }
   },
   actions: {
@@ -60,7 +64,9 @@ export default new Vuex.Store({
     },
     async removeSaving({commit}, savingToDelete) {
       const newSavings = _.cloneDeep(state.savings)
-      let index = newSavings.indexOf(savingToDelete);
+      let index = newSavings.findIndex(
+        saving => saving.time === savingToDelete.time
+      )
       newSavings.splice(index, 1);
       const data =  {
         username: 'qinyu', 
