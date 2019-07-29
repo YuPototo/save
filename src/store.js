@@ -6,6 +6,7 @@ import _ from 'lodash';
 Vue.use(Vuex);
 
 const state = {
+  username: 'qinyu',
   savings: []
 };
 
@@ -33,8 +34,12 @@ export default new Vuex.Store({
   },
   actions: {
     async fetchSavings({commit}) {
-      const res = await axios.get('http://localhost:3000/qinyu')
-      commit('SET_SAVING', res.data.savings)
+      try {
+        const res = await axios.get(`http://localhost:3000/${state.username}`)
+        commit('SET_SAVING', res.data.savings)
+      } catch (error) {
+        console.log(error)
+      }
     },
     async addSaving({commit}, saving) {
       const newSaving = {...saving, time:Date.now()}
@@ -59,8 +64,12 @@ export default new Vuex.Store({
         username: 'qinyu',
         savings: newSavings
       }
-      await axios.post('http://localhost:3000/', data)
-      commit('EDIT_SAVING', savingToEdit)
+      try {
+        await axios.post('http://localhost:3000/', data)
+        commit('EDIT_SAVING', savingToEdit)
+      } catch(error) {
+        console.log(error)
+      }
     },
     async removeSaving({commit}, savingToDelete) {
       const newSavings = _.cloneDeep(state.savings)
@@ -69,11 +78,15 @@ export default new Vuex.Store({
       )
       newSavings.splice(index, 1);
       const data =  {
-        username: 'qinyu', 
+        username: this.$store.state.username, 
         savings: newSavings
       }
-      await axios.post('http://localhost:3000/', data)
-      commit('REMOVE_SAVING', savingToDelete)
+      try {
+        await axios.post('http://localhost:3000/', data)
+        commit('REMOVE_SAVING', savingToDelete)
+      } catch(error) {
+        console.log(error)
+      }
     }
   }
 });
